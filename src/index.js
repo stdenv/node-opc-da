@@ -16,47 +16,46 @@ const OPCServer = require('./opcServer');
 const OPCSyncIO = require('./opcSyncIO');
 const dcom = require('node-dcom');
 const EventEmitter = require('events').EventEmitter;
-const {ComServer, Session, Clsid} = dcom;
+const { ComServer, Session, Clsid } = dcom;
 
 /**
- * 
  * @param {String} address
- * @param {String} domain 
- * @param {String} user 
- * @param {String} pass 
- * @param {String} clsid 
- * @param {object} [opts] 
+ * @param {String} domain
+ * @param {String} user
+ * @param {String} pass
+ * @param {String} clsid
+ * @param {object} [opts]
  * @returns {Promise<{comServer:ComServer, opcServer:OPCServer}>}
  */
 async function createServer(address, domain, user, pass, clsid, opts) {
-  EventEmitter.call(this);
-  let session = new Session();
-  session = session.createSession(domain, user, pass);
-  session.setGlobalSocketTimeout(7000);
+    EventEmitter.call(globalThis);
+    let session = new Session();
+    session = session.createSession(domain, user, pass);
+    session.setGlobalSocketTimeout(7000);
 
-  let comServer = new ComServer(new Clsid(clsid), address, session);
-  
-  await comServer.init();
-  console.log(`debug`);
-  let comObject = await comServer.createInstance();
+    let comServer = new ComServer(new Clsid(clsid), address, session);
 
-  let opcServer = new OPCServer(opts);
-  await opcServer.init(comObject);
+    await comServer.init();
+    console.log(`debug`);
+    let comObject = await comServer.createInstance();
 
-  return {comServer, opcServer};
+    let opcServer = new OPCServer(opts);
+    await opcServer.init(comObject);
+
+    return { comServer, opcServer };
 }
 
 module.exports = {
-  constants,
-  OPCAsyncIO,
-  OPCBrowser,
-  OPCCommon,
-  OPCGroupStateManager,
-  OPCItemIO,
-  OPCItemManager,
-  OPCItemProperties,
-  OPCServer,
-  OPCSyncIO,
-  dcom,
-  createServer
+    constants,
+    OPCAsyncIO,
+    OPCBrowser,
+    OPCCommon,
+    OPCGroupStateManager,
+    OPCItemIO,
+    OPCItemManager,
+    OPCItemProperties,
+    OPCServer,
+    OPCSyncIO,
+    dcom,
+    createServer
 }
