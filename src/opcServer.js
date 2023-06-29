@@ -44,7 +44,6 @@ const groupCache = new WeakMap();
 class OPCServer extends events.EventEmitter {
 
     /**
-     * 
      * @param {object} [opts]
      * @param {object} [opts.groupDefaults]
      * @param {boolean} [opts.groupDefaults.active=true]
@@ -76,7 +75,6 @@ class OPCServer extends events.EventEmitter {
     }
 
     /**
-     *
      * @param {*} unknown
      * @returns {Promise<void>}
      */
@@ -123,7 +121,6 @@ class OPCServer extends events.EventEmitter {
     }
 
     /**
-     * 
      * @param {String} name the group name
      * @param {GroupProperties} [opts]
      * @returns {Promise<?>}
@@ -189,8 +186,7 @@ class OPCServer extends events.EventEmitter {
     }
 
     /**
-     * 
-     * @param {number} error 
+     * @param {number} error
      * @param {number} [localeID]
      * @returns {Promise<?>} a descriptive string for the error code
      * @opNum 1
@@ -217,8 +213,8 @@ class OPCServer extends events.EventEmitter {
         if (hresult != 0) {
             if (result.lenght == 0)
                 throw new Error(String(hresult));
-            else 
-                debug(new Error(String(hresult)));
+            else
+                debug(String(hresult));
         }
 
         return result[0].getString();
@@ -226,7 +222,6 @@ class OPCServer extends events.EventEmitter {
     }
 
     /**
-     * 
      * @param {string} name
      * @returns {Promise<OPCGroupStateManager>}
      * @opNum 2
@@ -249,12 +244,13 @@ class OPCServer extends events.EventEmitter {
         if (hresult != 0) {
             if (result.lenght == 0)
                 throw new Error(String(hresult));
-            else 
-                debug(new Error(String(hresult)));
+            else
+                debug(String(hresult));
         }
 
         let group = new OPCGroupStateManager();
-        await group.init(result[0]);
+        // addresses issue #4
+        await group.init(result[0]._obj);
         debug("Successfully get request for group \"" + name +"\".");
         return group;
     }
@@ -294,8 +290,8 @@ class OPCServer extends events.EventEmitter {
         if (hresult != 0) {
             if (result.lenght == 0)
                 throw new Error(String(hresult));
-            else 
-                debug(new Error(String(hresult)));
+            else
+                debug(String(hresult));
         }
 
         let resStruct = result[0].getValue().getReferent();
@@ -317,14 +313,14 @@ class OPCServer extends events.EventEmitter {
     }
 
     /**
-     * 
      * @param {OPCGroupStateManager|number} handle
      * @param {boolean} [force=false]
      * @returns {Promise<?>}
      * @opNum 4
      */
     async removeGroup(handle, force) {
-        debug("Removing group \"" + name + "\"...");
+        // addresses issue #8
+        debug("Removing group \"" + handle + "\"...");
         if (!this._comObj) throw new Error("Not initialized");
 
         if (handle instanceof OPCGroupStateManager) {
@@ -341,11 +337,11 @@ class OPCServer extends events.EventEmitter {
         callObject.addInParamAsInt(force ? 1 : 0, Flags.FLAG_NULL);
 
         await this._comObj.call(callObject);
-        debug("Group \"" + name + "\" successfully removed.");
+        // addresses issue #8
+        debug("Group \"" + handle + "\" successfully removed.");
     }
 
     /**
-     * 
      * @param {number} scope an OPC scope
      * @returns {Promise<string[]>}
      * @opNum 5
@@ -368,7 +364,7 @@ class OPCServer extends events.EventEmitter {
         if (hresult != 0) {
             if (result.lenght == 0)
                 throw new Error(String(hresult));
-            else 
+            else
                 debug("No groups were found");
         }
 

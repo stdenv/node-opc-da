@@ -1,5 +1,9 @@
 # opc-da
 
+>
+> 😃 Just a little fix to the origin awesone package [`node-opc-da`](https://www.npmjs.com/package/node-opc-da) from [`@st-one-io/node-opc-da`](https://github.com/st-one-io/node-opc-da)
+>
+
 This library implements the OPC-DA specifications and allows to communicate with OPC Servers, relying on the [node-dcom](https://github.com/netsmarttech/node-dcom) library for DCOM/DCE-RPC for protocol implementation. Currently this lib support browsing calls and synchronous reads. The code overall strucuture was heavly based on [Utgard](https://en.wikipedia.org/wiki/Utgard_(software)).
 
 This node was created by [Smart-Tech](https://netsmarttech.com) as part of the [ST-One](https://netsmarttech.com/page/st-one) project.
