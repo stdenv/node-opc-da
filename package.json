@@ -1,6 +1,9 @@
 {
     "name": "@stdenv/node-opc-da",
-    "version": "1.0.7-update.1",
+    "publishConfig": {
+        "access": "public"
+    },
+    "version": "1.0.7-fix.1",
     "description": "A library to communicate with OPC-DA servers",
     "main": "src/index.js",
     "scripts": {
